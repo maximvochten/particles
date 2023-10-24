@@ -316,7 +316,10 @@ class Bootstrap(particles.FeynmanKac):
 
     def __init__(self, ssm=None, data=None):
         self.ssm = ssm
-        self.data = data
+        if isinstance(data, type(None)):
+            self.data = []
+        else:
+            self.data = data
         self.du = self.ssm.PX0().dim
 
     @property
@@ -348,6 +351,12 @@ class Bootstrap(particles.FeynmanKac):
     def add_func(self, t, xp, x):
         return self.ssm.add_func(t, xp, x)
 
+    def add_observation(self, curr_obs):
+        self.data.append(curr_obs)
+    
+    def add_observation_list(self, observations, window_increment):
+    	ind = len(observations) - window_increment
+    	self.data[-ind:] = observations
 
 class GuidedPF(Bootstrap):
     """Guided filter for a given state-space model.
